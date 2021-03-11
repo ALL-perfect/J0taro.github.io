@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>跑马灯</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+    
+    <div id="app">
+        <input type="button" value="start" :title='button1' @click='start'>
+        <input type="button" value="pause" :title='button2' @click='pause'>
+        <h4>{{ msg }}</h4>
+    </div>
+
+    <script>
+        // 在vm实例中，如果想要获得data上的数据，或者想要调用methods中的方法，必须要使用this.数据属性名来进行访问
+        // vm实例，会监听自己身上data中所有数据的改变，只要数据变化，就会自动在页面中同步最新的数据；程序员只需要关心数据，不用关心重新渲染
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                button1: '开始跑马灯',
+                button2: '结束',
+                msg: '我是一个跑马灯~~~~~~~',
+                intervalID : null //定义一个计时器ID
+            },
+            methods: {
+                // ES6写法,解析的时候会自动加上function
+                start() {
+                    // 直接在子方法里用this,此时this指的是子方法的对象，需要用一个_this来保存上级对象
+                    var _this = this
+                    // 确保定时器只能执行一次
+                    if(this.intervalID != null) return
+                    this.intervalID = setInterval(function () {
+                        console.log(_this.msg)
+                        // 获取头部第一个字符
+                        var begin = _this.msg.substring(0,1)
+                        // 获取后面所有字符
+                        var end = _this.msg.substring(1)
+                        // 将头部第一个字符拼接到尾部
+                        _this.msg= end + begin
+                    }, 400)
+                    
+                    // 用箭头函数时，this可直接用上级对象
+                    // this.intervalID = setInterval( () => {
+                    //     console.log(this.msg)
+                    //     // 获取头部第一个字符
+                    //     var begin = this.msg.substring(0,1)
+                    //     // 获取后面所有字符
+                    //     var end = this.msg.substring(1)
+                    //     // 将头部第一个字符拼接到尾部
+                    //     this.msg= end + begin
+                    // }, 400)
+
+
+                },
+                pause() {
+                    clearInterval(this.intervalID)
+                    // 每当清除了定时器之后，就将定时器ID置于null，以保证下一次定时器可以正常开启
+                    this.intervalID = null
+                }
+            }
+        })
+    </script>
+</body>
+</html>
