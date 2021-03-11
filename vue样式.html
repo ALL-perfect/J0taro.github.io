@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./lib/vue.js"></script>
+    <title>样式</title>
+    <style>
+        .red{
+            color: darkred;
+        }
+        .thin{
+            font-weight: 200;
+        }
+        .italic{
+            font-style: italic;
+        }
+        .active{
+            letter-spacing: 0.5em;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- 普通使用样式方式 -->
+        <h1 class='red thin'>{{ msg1 }}</h1>
+        <!-- 使用vue提供的格式,直接传递一个数组，需要用v-bind -->
+        <h1 :class="['red','thin','italic']">{{ msg1 }}</h1>
+        <!-- 数组中使用三元表达式 -->
+        <input type="button" @click='changeFlag' :value="'点我改变flag的值 此时flag = '+flag">
+        <h1 :class="['red','thin',flag?'active':'']">{{ msg1 }}</h1>
+        <!-- 使用对象代替三元表达式，提高可读性 -->
+        <h1 :class="['red','thin',{active:flag}]">{{ msg1 }}</h1>
+        <!-- 直接使用对象,在使用v-bind绑定对象的时候，对象的属性是类名，类名可不带引号 -->
+        <h1 :class="{red:flag, thin:flag, italic:flag, active:flag}">{{ msg1 }}</h1>
+
+        <!-- 内联样式使用style，如果属性名称里有-则必须加引号，否则报错 -->
+        <h2 :style="{color:'red', 'font-weight':300}">{{ msg2 }}</h2>
+        <h2 :style="style1">{{ msg2 }}</h2>
+        <!-- 使用数组绑定多个样式 -->
+        <h2 :style="[style1, style2]">{{ msg2 }}</h2>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                msg1: '测试下内部CSS',
+                msg2: '测试下内联样式',
+                flag: true,
+                style1:  {color:'red', 'font-weight':300},
+                style2:  {'font-style': 'italic' }
+            },
+            methods: {
+                changeFlag(){
+                    if(this.flag == true){
+                        this.flag = false;
+                        console.log(this.flag);  
+                    }
+                    else{
+                       this.flag = true; 
+                       console.log(this.flag);  
+                    }
+                        
+                }
+            }
+        })
+    </script>
+</body>
+</html>

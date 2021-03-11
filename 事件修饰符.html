@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事件修饰符</title>
+    <script src="./lib/vue.js"></script>
+    <style>
+        .inner{
+            height: 150px;
+            background-color: darkcyan;
+        }
+        .capture{
+            height: 150px;
+            background-color:darkgray;
+        }
+        .self{
+            height: 150px;
+            background-color:dimgray;
+        }
+        .once{
+            height: 150px;
+            background-color:gray;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div id="app">
+        <div class="inner" @click='div1Handler'>
+            <!-- 使用了.stop阻止冒泡 -->
+            <input type="button" value="按一下" @click.stop='btnHandler'>
+            <!-- 使用.prevent阻止默认行为 -->
+            <a href="https://www.baidu.com/" @click.prevent.stop='linkclick'>点此百度</a>
+        </div>
+        <!-- 使用了.capture执行捕获触发事件机制,捕获和冒泡正好相反-->
+        <div class="capture" @click.capture='div1Handler'>
+            <input type="button" value="按一下" @click.stop='btnHandler'>
+        </div>
+        <!-- 使用了.self只有点击当前元素的时候才会触发事件处理函数,不去捕获也不冒泡 -->
+        <div class="self" @click.self='div1Handler'>
+            <input type="button" value="按一下" @click.self='btnHandler'>
+        </div>
+        <!-- 使用了.once只触发一次事件处理函数 -->
+        <div class="self" @click.self='div1Handler'>
+            <a href="https://www.baidu.com/" @click.prevent.once='linkclick'>点此百度</a>
+        </div>
+    </div>
+    
+
+    <script>
+        var vm1 = new Vue({
+            el: '#app',
+            data: {
+
+            }, 
+
+            methods: {
+                div1Handler(){
+                    console.log('你按了div标签')
+                },
+                btnHandler(){
+                    console.log('你按了按钮')
+                },
+                linkclick(){
+                    console.log('你点了链接')
+                }
+            }
+        })
+    </script>
+</body>
+</html>
